@@ -35,7 +35,7 @@ export default class InputField extends Component {
         <input
           onChange={this.handleChange}
           type='text'
-          value={this.state.inputField}
+          value={this.state}
           name='userInput'
         />
         <br />

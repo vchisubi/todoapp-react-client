@@ -5,7 +5,7 @@ export default function ButtonComponents (props) {
     <div className='button-container'>
       <button className='view-button' onClick={props.handleShowAll}>Show All Tasks</button>
       <button className='view-button' onClick={props.handleShowActive}>Show Active Tasks</button>
-      <button className='view-button' onClick={props.handleShowComplete}>Show Active Tasks</button>
+      <button className='view-button' onClick={props.handleShowComplete}>Show Completed Tasks</button>
       <button className='view-button' onClick={props.handleClearAll}>Clear All Tasks</button>
     </div>
   )

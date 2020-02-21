@@ -6,7 +6,7 @@ export default function InputField2 (props) {
       <input
         onChange={props.handleInput}
         type='text'
-        value={props.data.inputField}
+        value={props.data}
         name='userInput'
       />
       <br />

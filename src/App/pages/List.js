@@ -19,11 +19,12 @@ class List extends React.Component {
 
     this.onCheckboxChange = this.handleChange.bind(this)
     this.onDeleteTask = this.handleClick.bind(this)
-    this.showAll = this.showAll.bind(this)
-    this.showActive = this.showActive.bind(this)
+
+    // this.showAll = this.showAll.bind(this)
+    // this.showActive = this.showActive.bind(this)
     this.handleClear = this.handleClear.bind(this)
-    this.handleInput = this.handleInput.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    // this.handleInput = this.handleInput.bind(this)
+    // this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   // Fetch the list on first mount
@@ -33,39 +34,24 @@ class List extends React.Component {
 
   getTodoList = () => {
     console.log('Fetch List')
-    const myController = new Controllers()
-    myController.updateAndSort()
+    this.myController.updateAndSort()
       .then(result => {
         this.setState({ todos: result })
       })
   }
 
-  // rerender = () => {
-  //   let updatedTodos = []
-  //   this.setState(prevState => {
-  //     const myController = new Controllers()
-  //     myController.updateAndSort()
-  //       .then(result => {
-  //         updatedTodos = result
-  //         return { todos: updatedTodos }
-  //       })
-  //   })
-  // }
-
   showAll = () => {
-    console.log('show all')
+    console.log('Show All')
     this.getTodoList()
   }
 
   showActive = () => {
     console.log('Show Active')
     const updatedTodos = []
-    const myController = new Controllers()
-    myController.updateAndSort()
+    this.myController.updateAndSort()
       .then(result => {
         result.map(todo => {
           if (todo.completed === false) {
-            // console.log(updatedTodos)
             updatedTodos.push(todo)
           }
           this.setState({ todos: updatedTodos })
@@ -76,12 +62,10 @@ class List extends React.Component {
   showComplete = () => {
     console.log('Show Complete')
     const updatedTodos = []
-    const myController = new Controllers()
-    myController.updateAndSort()
+    this.myController.updateAndSort()
       .then(result => {
         result.map(todo => {
           if (todo.completed === true) {
-            // console.log(updatedTodos)
             updatedTodos.push(todo)
           }
           this.setState({ todos: updatedTodos })
@@ -89,9 +73,9 @@ class List extends React.Component {
       })
   }
 
-  // for CHECKBOX
+  // Handles checkbox toggle for tasks
   handleChange (inputId) {
-    console.log('Checkboxed')
+    console.log('Checked')
     this.setState(prevState => {
       // Use .map() to go thru each todo and look for the target todo via id
       const updatedTodos = prevState.todos.map(todo => {
@@ -99,8 +83,7 @@ class List extends React.Component {
           // Set the completed attribute to the opposite of what it was before
           todo.completed = !todo.completed
           // update the task object im the remote db
-          const myController = new Controllers()
-          myController.patchTask(inputId, todo.completed)
+          this.myController.patchTask(inputId, todo.completed)
         }
         // puts the original todo in the mapped array
         return todo
@@ -110,15 +93,14 @@ class List extends React.Component {
     })
   }
 
-  // for DELETE
+  // Handles deletion of a task
   handleClick (inputId) {
     console.log('Deleted')
     const updatedTodos = []
     this.setState(prevState => {
       prevState.todos.map(todo => {
         if (todo.id === inputId) {
-          const myController = new Controllers()
-          myController.obliterateTask(inputId)
+          this.myController.obliterateTask(inputId)
         } else {
           updatedTodos.push(todo)
         }
@@ -129,20 +111,16 @@ class List extends React.Component {
   }
 
   handleClear () {
-    this.setState(prevState => {
-      // const myController = new Controllers()
-      // myController.obliterateAll()
-      this.myController.obliterateAll()
-      return { todos: [] }
-    })
+    this.myController.obliterateAll()
+    this.setState({ todos: [] })
   }
 
-  handleInput = event => {
-    // this.setState({ inputfield: event.target.value })
-    const { name, value, type } = event.target
-    if (type === 'text' && name === 'userInput') {
-      this.setState({ inputfield: value })
-    }
+  handleInput = e => {
+    this.setState({ inputfield: e.target.value })
+    // const { name, value, type } = event.target
+    // if (type === 'text' && name === 'userInput') {
+    //   this.setState({ inputfield: value })
+    // }
   }
 
   handleSubmit = e => {
@@ -152,19 +130,16 @@ class List extends React.Component {
     } else {
       const tempState = this.state.inputfield
       console.log(tempState)
-      const myController = new Controllers()
       // POST todo
-      myController.postTodo(this.state.inputfield)
-      myController.updateAndSort().then(result => {
-        this.setState({ todos: result, inputfield: '' })
+      this.myController.postTodo(this.state.inputfield)
+      this.myController.updateAndSort().then(result => {
+        this.setState({ inputfield: '', todos: result })
       })
-      // this.setState({ inputField: '' })
     }
   }
 
   render () {
     // const { todos } = this.state
-    // props are passed to TodoItem.js thru here
     const todoItems = this.state.todos.map(item =>
       <TodoItem
         key={item._id}
@@ -175,39 +150,17 @@ class List extends React.Component {
 
     return (
       <div className='App'>
-        {/* <InputField
-          onSubmit={this.handleSubmit}
-        /> */}
-
         <header className='App-header'>
-
           <div className='todo-list'>
             <InputField2
               handleSubmit={this.handleSubmit}
               handleInput={this.handleInput}
               data={this.state.inputfield}
             />
-            {/* <form onSubmit={this.handleSubmit}>
-              <input
-                onChange={this.handleInput}
-                type='text'
-                value={this.state.inputField}
-                name='userInput'
-              />
-              <br />
-              <button className='submit-button'>Submit</button>
-            </form> */}
             <ul>
               {todoItems}
             </ul>
           </div>
-
-          {/* <div className='button-container'>
-            <button className='view-button' onClick={this.showAll}>Show All Tasks</button>
-            <button className='view-button' onClick={this.showActive}>Show Active Tasks</button>
-            <button className='view-button' onClick={this.showComplete}>Show Active Tasks</button>
-            <button className='view-button' onClick={this.handleClear}>Clear All Tasks</button>
-          </div> */}
           <ButtonComponents
             handleShowAll={this.showAll}
             handleShowActive={this.showActive}
