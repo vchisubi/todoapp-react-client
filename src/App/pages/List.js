@@ -1,7 +1,6 @@
 import React from 'react'
 import Controllers from '../controllers/controllers'
-// import InputField from '../inputs/inputField'
-import InputField2 from '../inputs/inputField2'
+import InputField from '../inputs/inputField'
 import TodoItem from '../views/components/taskItem'
 import ButtonComponents from '../views/buttons/buttons'
 
@@ -33,7 +32,6 @@ class List extends React.Component {
   }
 
   getTodoList = () => {
-    console.log('Fetch List')
     this.myController.updateAndSort()
       .then(result => {
         this.setState({ todos: result })
@@ -41,12 +39,10 @@ class List extends React.Component {
   }
 
   showAll = () => {
-    console.log('Show All')
     this.getTodoList()
   }
 
   showActive = () => {
-    console.log('Show Active')
     const updatedTodos = []
     this.myController.updateAndSort()
       .then(result => {
@@ -60,7 +56,6 @@ class List extends React.Component {
   }
 
   showComplete = () => {
-    console.log('Show Complete')
     const updatedTodos = []
     this.myController.updateAndSort()
       .then(result => {
@@ -95,7 +90,6 @@ class List extends React.Component {
 
   // Handles deletion of a task
   handleClick (inputId) {
-    console.log('Deleted')
     const updatedTodos = []
     this.setState(prevState => {
       prevState.todos.map(todo => {
@@ -112,15 +106,11 @@ class List extends React.Component {
 
   handleClear () {
     this.myController.obliterateAll()
-    this.setState({ todos: [] })
+    this.setState({ todos: [], activeTasks: [], doneTasks: [] })
   }
 
   handleInput = e => {
     this.setState({ inputfield: e.target.value })
-    // const { name, value, type } = event.target
-    // if (type === 'text' && name === 'userInput') {
-    //   this.setState({ inputfield: value })
-    // }
   }
 
   handleSubmit = e => {
@@ -128,18 +118,15 @@ class List extends React.Component {
     if (this.state.inputfield === '') {
       alert('Please enter a task!')
     } else {
-      const tempState = this.state.inputfield
-      console.log(tempState)
-      // POST todo
       this.myController.postTodo(this.state.inputfield)
       this.myController.updateAndSort().then(result => {
         this.setState({ inputfield: '', todos: result })
+        this.getTodoList()
       })
     }
   }
 
   render () {
-    // const { todos } = this.state
     const todoItems = this.state.todos.map(item =>
       <TodoItem
         key={item._id}
@@ -152,7 +139,7 @@ class List extends React.Component {
       <div className='App'>
         <header className='App-header'>
           <div className='todo-list'>
-            <InputField2
+            <InputField
               handleSubmit={this.handleSubmit}
               handleInput={this.handleInput}
               data={this.state.inputfield}
