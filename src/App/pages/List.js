@@ -1,8 +1,10 @@
 import React from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import Controllers from '../controllers/controllers'
 import InputField from '../inputs/inputField'
 import TodoItem from '../views/components/taskItem'
 import ButtonComponents from '../views/buttons/buttons'
+import axios from 'axios'
 
 class List extends React.Component {
   constructor (props) {
@@ -10,23 +12,15 @@ class List extends React.Component {
     this.state = {
       inputfield: '',
       todos: [],
-      activeTasks: [],
-      doneTasks: []
+      loggingOut: false
     }
 
     this.myController = new Controllers()
-
     this.onCheckboxChange = this.handleChange.bind(this)
     this.onDeleteTask = this.handleClick.bind(this)
-
-    // this.showAll = this.showAll.bind(this)
-    // this.showActive = this.showActive.bind(this)
     this.handleClear = this.handleClear.bind(this)
-    // this.handleInput = this.handleInput.bind(this)
-    // this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  // Fetch the list on first mount
   componentDidMount () {
     this.getTodoList()
   }
@@ -106,7 +100,7 @@ class List extends React.Component {
 
   handleClear () {
     this.myController.obliterateAll()
-    this.setState({ todos: [], activeTasks: [], doneTasks: [] })
+    this.setState({ todos: [] })
   }
 
   handleInput = e => {
@@ -126,6 +120,14 @@ class List extends React.Component {
     }
   }
 
+  handleLogout = () => {
+    axios.get('/auth/logout').then((res) => {
+      if (res.data) {
+        this.setState({ loggingOut: true })
+      }
+    })
+  }
+
   render () {
     const todoItems = this.state.todos.map(item =>
       <TodoItem
@@ -135,8 +137,27 @@ class List extends React.Component {
         handleClick={this.onDeleteTask}
       />)
 
+    if (this.state.loggingOut) {
+      return (
+        <Redirect to='/login' />
+      )
+    }
     return (
       <div className='App'>
+        <nav>
+          <ul>
+            <li>
+              <Link to='./'>
+                <button className='nav-button'>
+                Home
+                </button>
+              </Link>
+            </li>
+            <li>
+              <button className='nav-button' onClick={this.handleLogout}>Log Out</button>
+            </li>
+          </ul>
+        </nav>
         <header className='App-header'>
           <div className='todo-list'>
             <InputField

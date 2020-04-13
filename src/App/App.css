@@ -1,10 +1,45 @@
+nav {
+  background: #282c34;
+  padding: 5px 200px;
+}
+
+nav ul {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+nav li {
+  list-style-type: none;
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+
+.nav-button {
+  width: 300px;
+  height: 25px;
+  float: center;
+  border: 2px solid gray;
+  text-align: center;
+  margin: 5px 5px 5px 5px;
+}
+
+.logreg-button {
+  width: 200px;
+  height: 25px;
+  float: center;
+  border: 2px solid gray;
+  text-align: center;
+  margin: 5px 5px 5px 5px;
+}
+
 .App {
   text-align: center;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,7 +72,7 @@ body {
       0 20px 0 -10px #eee,
           /* The third layer shadow */
       0 20px 1px -9px rgba(0,0,0,0.15);
-  padding: 20px;
+  padding: 10px;
 }
 
 form {
@@ -61,6 +96,7 @@ form {
 
 input {
   padding: 10px;
+  margin: 2px
 }
 
 input[type=checkbox] {
@@ -114,4 +150,22 @@ input[type=checkbox]:focus {
 
 button:hover{
   background: #6495ED;	
+}
+
+.google-button{
+  color: #fff;
+  text-decoration: none;
+  font-size: 10px;
+  padding: 10px;
+  background: #282c34;
+  margin: 10 10 10 10px;
+}
+
+.link-button{
+  color: #fff;
+  text-decoration: none;
+  font-size: 10px;
+  padding: 8px;
+  background: #282c34;
+  margin: auto;
 }

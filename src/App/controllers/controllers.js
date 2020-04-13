@@ -3,59 +3,43 @@ import axios from 'axios'
 
 export default class Controllers extends React.Component {
   updateAndSort = async () => {
-    // const resultArray = await axios.get('/api/todos')
-    //   .then(function (response) {
-    //     response.json()
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
-    //   .finally(function () {
-    //   })
-    const resultArray = await fetch('/api/todos').then(res => res.json())
-    const sortedArray = resultArray.sort(function (a, b) { return a._id - b._id })
-    return sortedArray
-  }
+    let ownerid = ''
 
-  updateActiveTasks = async () => {
-    const resultArray = []
-    await this.updateAndSort().then(result => {
-      result.forEach(function (todoItem) {
-        if (todoItem.completed === true) {
-          resultArray.push(todoItem)
-        }
-      })
+    await axios.get('auth/authCheckUser').then((res) => {
+      ownerid = res.data._id
     })
-    return resultArray
-  }
 
-  updateCompletedTasks = async () => {
-    const resultArray = []
-    await this.updateAndSort().then(result => {
-      result.forEach(function (todoItem) {
-        if (todoItem.completed === false) {
-          resultArray.push(todoItem)
-        }
+    if (ownerid === '' || ownerid === null || ownerid === undefined) {
+      alert('No user is logged in!')
+      console.log('No user is logged in!')
+    } else {
+      const resultArray = await fetch('/api/todos/' + ownerid).then(res =>
+        res.json()
+      )
+      const sortedArray = resultArray.sort((a, b) => {
+        return a._id - b._id
       })
-    })
-    return resultArray
+      return sortedArray
+    }
   }
 
   postTodo = (inputTask) => {
-    const data = {}
-    data.title = inputTask
-    data.completed = false
-    axios.post('/api/todos', data)
-      .then(function (response) {
-        console.log('Added: ' + data.title)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    // Used to get the id (ownerid) of the current user to make tasks user specific
+    axios.get('auth/authCheckUser').then((res) => {
+      const data = {
+        title: inputTask,
+        ownerid: res.data._id,
+        completed: false
+      }
+      axios.post('/api/todos', data)
+        .then((res) => {
+          console.log('Added task: ' + data.title)
+        })
+    })
   }
 
   obliterateTask = (id) => {
-    axios.delete('api/todos/' + id).then(function (response) {
+    axios.delete('api/todos/' + id).then((res) => {
       console.log('Deleting: ' + id)
     })
       .catch(function (error) {
@@ -64,9 +48,13 @@ export default class Controllers extends React.Component {
         this.updateAndSort())
   }
 
-  obliterateAll = () => {
-    axios.delete('api/todos').then(function (response) {
-      console.log(response.data)
+  obliterateAll = async () => {
+    let ownerid = ''
+    await axios.get('auth/authCheckUser').then((res) => {
+      ownerid = res.data._id
+    })
+    axios.delete('api/todos/clear/' + ownerid).then((res) => {
+      console.log(res.data)
     })
       .catch(function (error) {
         console.log(error)
@@ -77,7 +65,6 @@ export default class Controllers extends React.Component {
     const data = {}
     data.id = id
     data.completed = toggle
-    console.log('Patching: ' + id)
     axios.patch('api/todos/' + id, data).then(function (response) {
     })
       .catch(function (error) {
