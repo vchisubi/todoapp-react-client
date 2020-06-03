@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { Component } from 'react'
+import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
 import Controllers from '../controllers/controllers'
-import InputField from '../inputs/inputField'
-import TodoItem from '../views/components/taskItem'
-import ButtonComponents from '../views/buttons/buttons'
-import axios from 'axios'
+import InputField from '../components/inputField'
+import TodoItem from '../components/taskItem'
+import ButtonComponents from '../components/buttons'
+import { AuthUserContext } from '../context/authUser'
 
-class List extends React.Component {
+class List extends Component {
+  static contextType = AuthUserContext
+
   constructor (props) {
     super(props)
     this.state = {
@@ -26,7 +29,7 @@ class List extends React.Component {
   }
 
   getTodoList = () => {
-    this.myController.updateAndSort()
+    this.myController.updateAndSort(this.context.user._id)
       .then(result => {
         this.setState({ todos: result })
       })
@@ -38,7 +41,7 @@ class List extends React.Component {
 
   showActive = () => {
     const updatedTodos = []
-    this.myController.updateAndSort()
+    this.myController.updateAndSort(this.context.user._id)
       .then(result => {
         result.map(todo => {
           if (todo.completed === false) {
@@ -51,7 +54,7 @@ class List extends React.Component {
 
   showComplete = () => {
     const updatedTodos = []
-    this.myController.updateAndSort()
+    this.myController.updateAndSort(this.context.user._id)
       .then(result => {
         result.map(todo => {
           if (todo.completed === true) {
@@ -64,17 +67,16 @@ class List extends React.Component {
 
   // Handles checkbox toggle for tasks
   handleChange (inputId) {
-    console.log('Checked')
     this.setState(prevState => {
       // Use .map() to go thru each todo and look for the target todo via id
       const updatedTodos = prevState.todos.map(todo => {
         if (todo.id === inputId) {
           // Set the completed attribute to the opposite of what it was before
           todo.completed = !todo.completed
-          // update the task object im the remote db
+          // uUdate the task object im the remote db
           this.myController.patchTask(inputId, todo.completed)
         }
-        // puts the original todo in the mapped array
+        // Puts the original todo in the mapped array
         return todo
       })
       // Set the todos to the newly updated todos array with the changed item
@@ -99,7 +101,7 @@ class List extends React.Component {
   }
 
   handleClear () {
-    this.myController.obliterateAll()
+    this.myController.obliterateAll(this.context.user._id)
     this.setState({ todos: [] })
   }
 
@@ -112,8 +114,8 @@ class List extends React.Component {
     if (this.state.inputfield === '') {
       alert('Please enter a task!')
     } else {
-      this.myController.postTodo(this.state.inputfield)
-      this.myController.updateAndSort().then(result => {
+      this.myController.postTodo(this.state.inputfield, this.context.user._id)
+      this.myController.updateAndSort(this.context.user._id).then(result => {
         this.setState({ inputfield: '', todos: result })
         this.getTodoList()
       })
@@ -123,6 +125,7 @@ class List extends React.Component {
   handleLogout = () => {
     axios.get('/auth/logout').then((res) => {
       if (res.data) {
+        this.context.setContext({ username: 'No User' })
         this.setState({ loggingOut: true })
       }
     })

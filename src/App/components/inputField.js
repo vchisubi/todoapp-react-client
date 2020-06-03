@@ -8,6 +8,7 @@ export default function InputField (props) {
         type='text'
         value={props.data}
         name='userInput'
+        autoFocus={true}
       />
       <br />
       <button className='submit-button'>Submit</button>

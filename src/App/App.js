@@ -5,8 +5,9 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import List from './pages/List'
-import ProtectedRoute from './views/components/ProtectedRoute'
-import axios from 'axios'
+import GoogleRedirect from './components/GoogleRedirect'
+import ProtectedRoute from './components/ProtectedRoute'
+import AuthUserContextProvider from './context/authUser'
 
 class App extends Component {
   constructor (props) {
@@ -16,23 +17,16 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {
-    this.checkAuth()
-  }
-
-  checkAuth = () => {
-    axios.get('/auth/authCheck').then((res) => {
-      this.setState({ loggedIn: res.data })
-    })
-  }
-
   render () {
     return (
       <Switch>
-        <Route exact path='/' component={Home} />
-        <Route path='/login' component={Login} />
-        <Route path='/register' component={Register} />
-        <ProtectedRoute path='/list' component={List} />
+        <AuthUserContextProvider>
+          <Route exact path='/' component={Home} />
+          <Route path='/login' component={Login} />
+          <Route path='/register' component={Register} />
+          <Route path='/redirect' component={GoogleRedirect} />
+          <ProtectedRoute path='/list' component={List} />
+        </AuthUserContextProvider>
       </Switch>
     )
   }

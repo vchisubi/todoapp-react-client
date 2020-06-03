@@ -74,6 +74,7 @@ class Register extends Component {
               value={registerUsername}
               onChange={this.onChange}
               required
+              autoFocus={true}
             />
             <br />
             <input

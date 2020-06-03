@@ -1,41 +1,26 @@
-import React from 'react'
 import axios from 'axios'
 
-export default class Controllers extends React.Component {
-  updateAndSort = async () => {
-    let ownerid = ''
-
-    await axios.get('auth/authCheckUser').then((res) => {
-      ownerid = res.data._id
+export default class Controllers {
+  updateAndSort = async (ownerId) => {
+    const resultArray = await fetch('/api/todos/' + ownerId).then(res =>
+      res.json()
+    )
+    const sortedArray = resultArray.sort((a, b) => {
+      return a._id - b._id
     })
-
-    if (ownerid === '' || ownerid === null || ownerid === undefined) {
-      alert('No user is logged in!')
-      console.log('No user is logged in!')
-    } else {
-      const resultArray = await fetch('/api/todos/' + ownerid).then(res =>
-        res.json()
-      )
-      const sortedArray = resultArray.sort((a, b) => {
-        return a._id - b._id
-      })
-      return sortedArray
-    }
+    return sortedArray
   }
 
-  postTodo = (inputTask) => {
-    // Used to get the id (ownerid) of the current user to make tasks user specific
-    axios.get('auth/authCheckUser').then((res) => {
-      const data = {
-        title: inputTask,
-        ownerid: res.data._id,
-        completed: false
-      }
-      axios.post('/api/todos', data)
-        .then((res) => {
-          console.log('Added task: ' + data.title)
-        })
-    })
+  postTodo = (inputTask, ownerId) => {
+    const data = {
+      title: inputTask,
+      ownerid: ownerId,
+      completed: false
+    }
+    axios.post('/api/todos', data)
+      .then((res) => {
+        console.log('Added task: ' + data.title)
+      })
   }
 
   obliterateTask = (id) => {
@@ -48,12 +33,8 @@ export default class Controllers extends React.Component {
         this.updateAndSort())
   }
 
-  obliterateAll = async () => {
-    let ownerid = ''
-    await axios.get('auth/authCheckUser').then((res) => {
-      ownerid = res.data._id
-    })
-    axios.delete('api/todos/clear/' + ownerid).then((res) => {
+  obliterateAll = async (ownerId) => {
+    axios.delete('api/todos/clear/' + ownerId).then((res) => {
       console.log(res.data)
     })
       .catch(function (error) {
@@ -65,7 +46,7 @@ export default class Controllers extends React.Component {
     const data = {}
     data.id = id
     data.completed = toggle
-    axios.patch('api/todos/' + id, data).then(function (response) {
+    axios.patch('api/todos/' + id, data).then((res) => {
     })
       .catch(function (error) {
         console.log(error)
