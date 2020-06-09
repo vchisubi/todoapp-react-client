@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { AuthUserContext } from '../context/authUser'
+import { AuthUserContext } from '../../context/authUser'
 
 class ProtectedRoute extends Component {
   static contextType = AuthUserContext

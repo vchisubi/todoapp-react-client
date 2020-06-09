@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Clock from 'react-live-clock'
 import axios from 'axios'
+
 import { AuthUserContext } from '../context/authUser'
 import '../../App/App.css'
-import digikat from '../components/digikat.png'
+import digikat from '../assets/images/digikat.png'
 
 export default class Home extends Component {
   static contextType = AuthUserContext

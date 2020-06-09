@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
-import { AuthUserContext } from '../context/authUser'
+import { AuthUserContext } from '../../context/authUser'
 
 class GoogleRedirect extends Component {
   static contextType = AuthUserContext

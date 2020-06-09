@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
+
 import Controllers from '../controllers/controllers'
 import InputField from '../components/inputField'
 import TodoItem from '../components/taskItem'
-import ButtonComponents from '../components/buttons'
+import ButtonComponents from '../components/Buttons/buttons'
 import { AuthUserContext } from '../context/authUser'
 
 class List extends Component {
@@ -21,11 +22,18 @@ class List extends Component {
     this.myController = new Controllers()
     this.onCheckboxChange = this.handleChange.bind(this)
     this.onDeleteTask = this.handleClick.bind(this)
-    this.handleClear = this.handleClear.bind(this)
   }
 
   componentDidMount () {
     this.getTodoList()
+
+    setInterval(() => {
+      axios.get('/auth/tokenCheck').then((res) => {
+        if (res.data === false) {
+          this.handleLogout()
+        }
+      })
+    }, 900000)
   }
 
   getTodoList = () => {
@@ -66,7 +74,7 @@ class List extends Component {
   }
 
   // Handles checkbox toggle for tasks
-  handleChange (inputId) {
+  handleChange = (inputId) => {
     this.setState(prevState => {
       // Use .map() to go thru each todo and look for the target todo via id
       const updatedTodos = prevState.todos.map(todo => {
@@ -85,7 +93,7 @@ class List extends Component {
   }
 
   // Handles deletion of a task
-  handleClick (inputId) {
+  handleClick = (inputId) => {
     const updatedTodos = []
     this.setState(prevState => {
       prevState.todos.map(todo => {
@@ -100,16 +108,16 @@ class List extends Component {
     })
   }
 
-  handleClear () {
+  handleClear = () => {
     this.myController.obliterateAll(this.context.user._id)
     this.setState({ todos: [] })
   }
 
-  handleInput = e => {
+  handleInput = (e) => {
     this.setState({ inputfield: e.target.value })
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault()
     if (this.state.inputfield === '') {
       alert('Please enter a task!')
