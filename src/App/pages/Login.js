@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { AuthUserContext } from '../context/authUser'
+import { basic, home, register, google } from '../css/buttons'
+import { loginBorder } from '../css/visuals'
+import { loginContainer, inputContainer } from '../css/containers'
+import { loginCol } from '../css/columns'
 
 class Login extends Component {
   static contextType = AuthUserContext
@@ -26,7 +30,6 @@ class Login extends Component {
     var data = { username: loginUsername, password: loginPassword }
 
     axios.post('/auth/login', data).then(async (result) => {
-      // console.log(result.data)
       if (result.data.success === true) {
         const { setContext } = this.context
         await setContext(result.data.user, 'local')
@@ -47,50 +50,46 @@ class Login extends Component {
       )
     } else {
       return (
-        <div className='App'>
-          <nav>
-            <ul>
-              <li>
-                <Link to='./'>
-                  <button className='nav-button'>
-                  Home
-                  </button>
-                </Link>
-              </li>
-              <li>
-                <Link to='./register'>
-                  <button className='nav-button'>
-                  Register
-                  </button>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <form onSubmit={this.onSubmit}>
-            <h1>Login as Local User</h1>
-            <input
-              type='text'
-              name='loginUsername'
-              placeholder='Username'
-              value={loginUsername}
-              onChange={this.onChange}
-              autoFocus
-              required
-            />
-            <br />
-            <input
-              type='password'
-              name='loginPassword'
-              placeholder='Password'
-              value={loginPassword}
-              onChange={this.onChange}
-              required
-            />
-            <br />
-            <button className='logreg-button' type='submit'>Login</button>
-          </form>
-          <br />
-          <a className='google-button' href='http://localhost:4002/auth/google'> Google+ </a>
+        <div className={loginContainer.loginContainer}>
+          <div className={loginBorder.border}>
+            <div className={loginCol.loginCol1}>
+              <Link to='./'>
+                <button className={home.homeButton} />
+              </Link>
+              <Link to='./register'>
+                <button className={register.registerButton} />
+              </Link>
+            </div>
+            <div className={loginCol.loginCol2}>
+              <form onSubmit={this.onSubmit}>
+                <h1>Sign In</h1>
+                <div className={inputContainer.inputContainer}>
+                  <input
+                    type='text'
+                    name='loginUsername'
+                    placeholder='Username'
+                    value={loginUsername}
+                    onChange={this.onChange}
+                    autoFocus
+                    required
+                  />
+                </div>
+                <div className={inputContainer.inputContainer}>
+                  <input
+                    type='password'
+                    name='loginPassword'
+                    placeholder='Password'
+                    value={loginPassword}
+                    onChange={this.onChange}
+                    required
+                  />
+                </div>
+                <button className={basic.basicButton} type='submit'>Login</button>
+              </form>
+              <br />
+              <a className={google.googleButton} href='http://localhost:4002/auth/google' />
+            </div>
+          </div>
         </div>
       )
     }

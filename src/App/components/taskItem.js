@@ -1,4 +1,5 @@
 import React from 'react'
+import { todoItem } from '../css/visuals'
 
 export default function TodoItem (props) {
   const completedStyle = {
@@ -8,7 +9,7 @@ export default function TodoItem (props) {
   }
 
   return (
-    <div className='todo-item'>
+    <div className={todoItem.todoItem}>
       <input
         type='checkbox'
         onChange={() => props.handleChange(props.item.id)}
@@ -16,7 +17,6 @@ export default function TodoItem (props) {
       />
       <label style={props.item.completed ? completedStyle : null}>{props.item.title}</label>
       <span
-        className='obliterate'
         onClick={() => props.handleClick(props.item.id)}
       > {'\u00D7'}
       </span>

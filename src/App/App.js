@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import './App.css'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -8,6 +7,7 @@ import List from './pages/List'
 import GoogleRedirect from './components/GoogleRedirect/'
 import ProtectedRoute from './components/ProtectedRoute/'
 import AuthUserContextProvider from './context/authUser'
+import './css/visuals'
 
 class App extends Component {
   constructor (props) {

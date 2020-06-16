@@ -1,4 +1,12 @@
-nav {
+/* body {
+  background-color: #282c34;
+  background-image: url('https://images.pexels.com/photos/2166271/pexels-photo-2166271.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+  background-repeat: no-repeat;
+  background-size: 100% 375%;
+  overflow: hidden;
+} */
+
+/* nav {
   background: #282c34;
   padding: 5px 200px;
 }
@@ -12,7 +20,7 @@ nav ul {
 nav li {
   list-style-type: none;
   display: inline-block;
-  margin: 0 10px 0 0;
+  margin: 0 0 0 0;
 }
 
 .nav-button {
@@ -62,15 +70,10 @@ body {
   align-items: center;
   border: 1px solid #efefef;
   box-shadow:
-  /* The top layer shadow */
       0 1px 1px rgba(0,0,0,0.15),
-          /* The second layer */
       0 10px 0 -5px #eee,
-          /* The second layer shadow */
       0 10px 1px -4px rgba(0,0,0,0.15),
-          /* The third layer */
       0 20px 0 -10px #eee,
-          /* The third layer shadow */
       0 20px 1px -9px rgba(0,0,0,0.15);
   padding: 10px;
 }
@@ -168,4 +171,4 @@ button:hover{
   padding: 8px;
   background: #282c34;
   margin: auto;
-}
+} */

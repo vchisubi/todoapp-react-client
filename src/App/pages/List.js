@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
-
 import Controllers from '../controllers/controllers'
 import InputField from '../components/inputField'
 import TodoItem from '../components/taskItem'
-import ButtonComponents from '../components/Buttons/buttons'
+import ViewAllButton from '../components/Buttons/viewAllButton'
+import ViewActiveButton from '../components/Buttons/viewActiveButton'
+import ViewCompletedButton from '../components/Buttons/viewCompletedButton'
+import ClearAllButton from '../components/Buttons/clearAllButton'
 import { AuthUserContext } from '../context/authUser'
+import { home, logout } from '../css/buttons'
+import { listContainer, todolistContainer, navContainer } from '../css/containers'
+import { listCol } from '../css/columns'
+import divider from '../assets/images/divider.png'
 
 class List extends Component {
   static contextType = AuthUserContext
@@ -76,18 +82,13 @@ class List extends Component {
   // Handles checkbox toggle for tasks
   handleChange = (inputId) => {
     this.setState(prevState => {
-      // Use .map() to go thru each todo and look for the target todo via id
       const updatedTodos = prevState.todos.map(todo => {
         if (todo.id === inputId) {
-          // Set the completed attribute to the opposite of what it was before
           todo.completed = !todo.completed
-          // uUdate the task object im the remote db
           this.myController.patchTask(inputId, todo.completed)
         }
-        // Puts the original todo in the mapped array
         return todo
       })
-      // Set the todos to the newly updated todos array with the changed item
       return { todos: updatedTodos }
     })
   }
@@ -133,7 +134,7 @@ class List extends Component {
   handleLogout = () => {
     axios.get('/auth/logout').then((res) => {
       if (res.data) {
-        this.context.setContext({ username: 'No User' })
+        this.context.setContext({ username: 'No User' }, '')
         this.setState({ loggingOut: true })
       }
     })
@@ -154,39 +155,43 @@ class List extends Component {
       )
     }
     return (
-      <div className='App'>
-        <nav>
-          <ul>
-            <li>
-              <Link to='./'>
-                <button className='nav-button'>
-                Home
-                </button>
-              </Link>
-            </li>
-            <li>
-              <button className='nav-button' onClick={this.handleLogout}>Log Out</button>
-            </li>
-          </ul>
-        </nav>
-        <header className='App-header'>
-          <div className='todo-list'>
-            <InputField
-              handleSubmit={this.handleSubmit}
-              handleInput={this.handleInput}
-              data={this.state.inputfield}
-            />
+      <div className={listContainer.listContainer}>
+        <div className={listCol.listCol1}>
+          <InputField
+            handleSubmit={this.handleSubmit}
+            handleInput={this.handleInput}
+            data={this.state.inputfield}
+          />
+        </div>
+
+        <div className={listCol.listCol2}>
+          <img src={divider} width='15px' height='550px' />
+        </div>
+
+        <div className={listCol.listCol3}>
+          <div className={todolistContainer.todolistContainer}>
             <ul>
               {todoItems}
             </ul>
           </div>
-          <ButtonComponents
-            handleShowAll={this.showAll}
-            handleShowActive={this.showActive}
-            handleShowComplete={this.showComplete}
-            handleClearAll={this.handleClear}
-          />
-        </header>
+          <div className={navContainer.navContainer}>
+            <Link to='./'>
+              <button className={home.homeButton} />
+            </Link>
+            <button className={logout.logoutButton} onClick={this.handleLogout} />
+          </div>
+        </div>
+
+        <div className={listCol.listCol4}>
+          <img src={divider} width='15px' height='550px' />
+        </div>
+
+        <div className={listCol.listCol5}>
+          <ViewAllButton handleShowAll={this.showAll} />
+          <ViewActiveButton handleShowActive={this.showActive} />
+          <ViewCompletedButton handleShowComplete={this.showComplete} />
+          <ClearAllButton handleClearAll={this.handleClear} />
+        </div>
       </div>
     )
   }

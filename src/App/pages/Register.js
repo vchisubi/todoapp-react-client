@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
+import { basic, home, login } from '../css/buttons'
+import { registerContainer, inputContainer } from '../css/containers'
+import { registerBorder, sekret } from '../css/visuals'
+import { registerCol } from '../css/columns'
 
 class Register extends Component {
   constructor () {
@@ -46,57 +50,54 @@ class Register extends Component {
       return <Redirect to='/login' />
     } else {
       return (
-        <div className='App'>
-          <nav>
-            <ul>
-              <li>
-                <Link to='./'>
-                  <button className='nav-button'>
-                  Home
-                  </button>
-                </Link>
-              </li>
-              <li>
-                <Link to='./login'>
-                  <button className='nav-button'>
-                  Login
-                  </button>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <form onSubmit={this.onSubmit}>
-            <h1>Register Account</h1>
-            <input
-              type='text'
-              name='registerUsername'
-              placeholder='Username'
-              value={registerUsername}
-              onChange={this.onChange}
-              required
-              autoFocus={true}
-            />
-            <br />
-            <input
-              type='password'
-              name='registerPassword'
-              placeholder='Password'
-              value={registerPassword}
-              onChange={this.onChange}
-              required
-            />
-            <br />
-            <input
-              type='password'
-              name='registerConfirmPassword'
-              placeholder='Confirm Password'
-              value={registerConfirmPassword}
-              onChange={this.onChange}
-              required
-            />
-            <br />
-            <button className='logreg-button' type='submit'>Register</button>
-          </form>
+        <div className={registerContainer.registerContainer}>
+          <div className={registerBorder.border} />
+          <div className={registerCol.registerCol1}>
+            <Link to='./'>
+              <button className={home.homeButton} />
+            </Link>
+            <Link to='./login'>
+              <button className={login.loginButton} />
+            </Link>
+          </div>
+          <div className={registerCol.registerCol2}>
+            <form onSubmit={this.onSubmit}>
+              <h1>Register Account</h1>
+              <div className={inputContainer.inputContainer}>
+                <input
+                  type='text'
+                  name='registerUsername'
+                  placeholder='Username'
+                  value={registerUsername}
+                  onChange={this.onChange}
+                  required
+                  autoFocus
+                />
+              </div>
+              <div className={inputContainer.inputContainer}>
+                <input
+                  type='password'
+                  name='registerPassword'
+                  placeholder='Password'
+                  value={registerPassword}
+                  onChange={this.onChange}
+                  required
+                />
+              </div>
+              <div className={inputContainer.inputContainer}>
+                <input
+                  type='password'
+                  name='registerConfirmPassword'
+                  placeholder='Confirm Password'
+                  value={registerConfirmPassword}
+                  onChange={this.onChange}
+                  required
+                />
+              </div>
+              <button className={basic.basicButton} type='submit'>Register</button>
+            </form>
+          </div>
+          <div className={sekret.sekret} />
         </div>
       )
     }
