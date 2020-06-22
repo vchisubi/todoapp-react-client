@@ -87,7 +87,8 @@ class Login extends Component {
                 <button className={basic.basicButton} type='submit'>Login</button>
               </form>
               <br />
-              <a className={google.googleButton} href='http://localhost:4002/auth/google' />
+              {/* <a className={google.googleButton} href='http://localhost:4002/auth/google' /> */}
+              <a className={google.googleButton} href='http://vchi-todoapp-server.herokuapp.com//auth/google' />
             </div>
           </div>
         </div>
