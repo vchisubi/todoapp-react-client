@@ -88,7 +88,7 @@ class Login extends Component {
               </form>
               <br />
               {/* <a className={google.googleButton} href='http://localhost:4002/auth/google' /> */}
-              <a className={google.googleButton} href='http://vchi-todoapp-server.herokuapp.com//auth/google' />
+              <a className={google.googleButton} href='http://vchi-todoapp-server.herokuapp.com/auth/google' />
             </div>
           </div>
         </div>
